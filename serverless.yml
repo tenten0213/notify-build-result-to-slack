@@ -1,0 +1,36 @@
+service: notify-to-slack
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=1.40.0"
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: ${opt:stage}
+  region: ap-northeast-1
+functions:
+  notify:
+    handler: handler.notify
+    events:
+      - cloudwatchEvent:
+          event:
+            source:
+              - "aws.codebuild"
+            detail-type:
+              - "CodeBuild Build State Change"
+            detail:
+              build-status:
+                # CodeBuildのstatusが以下になるとイベントが発火する
+                - SUCCEEDED
+                - FAILED
+              project-name:
+                # 監視対象のプロジェクト
+                - ${opt:projectName}
+          enabled: true
+    # SlackのWebHook URLを暗号/復号するために利用
+    awsKmsKeyArn: ${opt:kmsKeyArn}
+    # Define function environment variables here
+    environment:
+      slackChannel: ${opt:channel}
+      kmsEncryptedHookUrl: ${opt:encryptedHookUrl}
