@@ -15,11 +15,11 @@ ServerlessとAWS CLIがインストールされていること。
 
 | 項目 |概要|
 |--------|--------|
-| `${aws_access_key}` | 利用するIAMのaccess_keyを設定する。|
-| `${aws_secret_access_key}` | 利用するIAMのsecret_access_keyを設定する。|
+| `${awsAccessKey}` | 利用するIAMのaccess_keyを設定する。|
+| `${awsSecretAccessKey}` | 利用するIAMのsecret_access_keyを設定する。|
 
 ```bash
-$ sls config credentials --provider aws --key ${aws_access_key} --secret ${aws_secret_access_key}
+$ sls config credentials --provider aws --key ${awsAccessKey} --secret ${awsSecretAccessKey}
 ```
 
 ### SlackのIncoming WebhookのWebhook URLを取得する
@@ -32,11 +32,11 @@ $ sls config credentials --provider aws --key ${aws_access_key} --secret ${aws_s
 
 | 項目 |概要|
 |--------|--------|
-| `${kms_keyid}` | 利用するKMSの鍵のキーIDを設定する。|
+| `${kmsKeyId}` | 利用するKMSの鍵のキーIDを設定する。|
 | `${webHookUrl}` | SlackのWebHook URLは `https://` を除いた値で置き換える。|
 
 ```bash
-$ aws kms encrypt --key-id ${kms_keyid} --plaintext ${webHookUrl} --output text --query CiphertextBlob
+$ aws kms encrypt --key-id ${kmsKeyId} --plaintext ${webHookUrl} --output text --query CiphertextBlob
 ```
 
 上記コマンドを実行すると、KMSの暗号鍵によって暗号されたSlackのWebHook URLが出力される。
